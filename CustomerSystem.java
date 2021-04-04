@@ -5,6 +5,7 @@
 
 import java.util.Scanner;
 // More packages may be imported in the space below
+import java.io.*;
 
 class CustomerSystem{
     public static void main(String[] args){
@@ -56,27 +57,87 @@ class CustomerSystem{
     * This method may also be broken down further depending on your algorithm
     */
     public static void enterCustomerInfo() {
+        
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Enter First Name: ");
+        String firstName = reader.nextLine();
+
+        System.out.println("Enter Last Name: ");
+        String lastName = reader.nextLine();
+
+        System.out.println("Enter City: ");
+        String city = reader.nextLine();
+
+        System.out.println("Enter Postal Code: ");
+        String postalCode = reader.nextLine();
+        Boolean valid = validatePostalCode(postalCode.substring(0,3));
+
+        while (valid == false) {
+            System.out.println("That postal code is invalid. Enter Postal Code: ");
+            postalCode = reader.nextLine();
+            valid = validatePostalCode(postalCode.substring(0,3));
+        }
+
+
+        System.out.println("Enter Credit Card Number: ");
+        String creditCard = reader.nextLine();
     }
     /*
     * This method may be edited to achieve the task however you like.
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    public static void validatePostalCode(){
+    public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
+
+        // Reading file and saving to String
+        FileReader file = new FileReader("C:/java/03_Luhn_Algorithm_Assignment/postal_codes.csv");
+        Scanner scnr = new Scanner(file);
+
+        String allPostalCodes = "";
+        
+        int lineNumber = 1;
+        while(scnr.hasNextLine()) {
+
+            String line = scnr.nextLine();
+
+            if (lineNumber > 1) {
+
+                String postalCode = line.substring(0,4); 
+
+                allPostalCodes = allPostalCodes + postalCode;
+
+            }
+
+            lineNumber++;
+        
+        } 
+
+        System.out.println(allPostalCodes);
+
+        // Getting user input and comparing against postal codes
+
+        int match = allPostalCodes.indexOf(userPostalCode);
+
+        if (match == -1)
+            return false;
+        return true;
+
+
     }
     /*
     * This method may be edited to achieve the task however you like.
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    public static void validateCreditCard(){
+    public static void validateCreditCard() {
     }
     /*
     * This method may be edited to achieve the task however you like.
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    public static void generateCustomerDataFile(){
+    public static void generateCustomerDataFile() {
     }
     /*******************************************************************
     *       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         *
