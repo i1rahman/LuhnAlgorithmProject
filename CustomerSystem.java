@@ -69,16 +69,21 @@ class CustomerSystem{
         System.out.println("Enter City: ");
         String city = reader.nextLine();
 
-        System.out.println("Enter Postal Code: ");
-        String postalCode = reader.nextLine();
-        Boolean valid = validatePostalCode(postalCode.substring(0,3));
-
-        while (valid == false) {
-            System.out.println("That postal code is invalid. Enter Postal Code: ");
-            postalCode = reader.nextLine();
-            valid = validatePostalCode(postalCode.substring(0,3));
+        String postalCode;
+        boolean validPostal = false;
+        try {
+            while (!validPostal) {
+                System.out.println("Enter Postal Code: ");
+                postalCode = reader.nextLine();
+                validPostal = validatePostalCode(postalCode.substring(0,3));
+                if (!validPostal)
+                    System.out.println("That postal code is invalid.");
+            }
         }
-
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
 
         System.out.println("Enter Credit Card Number: ");
         String creditCard = reader.nextLine();
@@ -91,11 +96,12 @@ class CustomerSystem{
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
         // Reading file and saving to String
-        FileReader file = new FileReader("C:/java/03_Luhn_Algorithm_Assignment/postal_codes.csv");
+        FileReader file = new FileReader(".\\postal_codes.csv");
         Scanner scnr = new Scanner(file);
 
         String allPostalCodes = "";
         
+        // https://stackoverflow.com/questions/42319341/how-do-i-start-scanning-from-the-second-row-of-my-csv-data-to-linked-list
         int lineNumber = 1;
         while(scnr.hasNextLine()) {
 
@@ -113,16 +119,11 @@ class CustomerSystem{
         
         } 
 
-        System.out.println(allPostalCodes);
+        // System.out.println(allPostalCodes);
 
         // Getting user input and comparing against postal codes
 
-        int match = allPostalCodes.indexOf(userPostalCode);
-
-        if (match == -1)
-            return false;
-        return true;
-
+        return (allPostalCodes.indexOf(userPostalCode) > -1);
 
     }
     /*
