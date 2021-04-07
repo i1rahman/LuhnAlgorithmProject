@@ -106,36 +106,6 @@ class CustomerSystem {
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    // public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
-
-    //     //TODO: Postal Code validation
-    //     // Postal Code caching 
-
-    //     // Reading file and saving to String
-    //     FileReader file = new FileReader(".\\postal_codes.csv");
-    //     Scanner scnr = new Scanner(file);
-
-    //     String allPostalCodes = "";
-        
-    //     // https://stackoverflow.com/questions/42319341/how-do-i-start-scanning-from-the-second-row-of-my-csv-data-to-linked-list
-    //     int lineNumber = 1;
-    //     while(scnr.hasNextLine()) {
-
-    //         String line = scnr.nextLine();
-
-    //         if (lineNumber > 1)
-    //             allPostalCodes += line.substring(0,4);
-
-    //         lineNumber++;
-        
-    //     } 
-
-    //     // Getting user input and comparing against postal codes
-
-    //     return (allPostalCodes.indexOf(userPostalCode) > -1);
-
-    // }
-
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
         if (userPostalCode.length() < 3)
