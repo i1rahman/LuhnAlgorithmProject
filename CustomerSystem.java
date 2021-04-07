@@ -17,7 +17,7 @@ class CustomerSystem{
         exitCondition = "9";
 
         // More variables for the main may be declared in the space below
-        
+        String customerCollection = "";
 
         do{
             printMenu();                                    // Printing out the main menu
@@ -26,11 +26,11 @@ class CustomerSystem{
             if (userInput.equals(enterCustomerOption)){
                 // Only the line below may be editted based on the parameter list and how you design the method return
 		        // Any necessary variables may be added to this if section, but nowhere else in the code
-                enterCustomerInfo();
+                customerCollection += enterCustomerInfo();
             }
             else if (userInput.equals(generateCustomerOption)) {
                 // Only the line below may be editted based on the parameter list and how you design the method return
-                generateCustomerDataFile();
+                generateCustomerDataFile(customerCollection);
             }
             else{
                 System.out.println("Please type in a valid option (A number from 1-9)");
@@ -56,7 +56,7 @@ class CustomerSystem{
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    public static void enterCustomerInfo() {
+    public static String enterCustomerInfo() {
         
         Scanner reader = new Scanner(System.in);
 
@@ -70,7 +70,7 @@ class CustomerSystem{
         String city = reader.nextLine();
 
         // Postal Code
-        String postalCode;
+        String postalCode = "";
         boolean validPostal = false;
         try {
             while (!validPostal) {
@@ -86,15 +86,17 @@ class CustomerSystem{
         }
         
         // Credit Card 
+        String creditCard = "";
         boolean validCC = false;
         while (!validCC) {
             System.out.println("Enter Credit Card Number: ");
-            String creditCard = reader.nextLine();
+            creditCard = reader.nextLine();
             validCC = validateCreditCard(creditCard);
             if (!validCC)
                 System.out.println("That Credit Card is invalid.");
         }
 
+        return firstName + ", " + lastName + ", " + city + ", " + postalCode + ", " + creditCard + "\r\n";     
     }
     /*
     * This method may be edited to achieve the task however you like.
@@ -166,7 +168,35 @@ class CustomerSystem{
         return (sum1 + sum2)%10 == 0;
     }
 
-    public static void generateCustomerDataFile() {
+    public static void generateCustomerDataFile(String customerCollectionData) {
+
+        Scanner reader = new Scanner(System.in);
+
+        System.out.print("Enter filename and path of the CSV: ");
+        String outputFilename = reader.nextLine();
+
+        File outFile = new File(outputFilename);
+
+        if (outFile.exists()) {
+            System.out.print("File already exists, ok to overwrite (y/n)? ");
+            if (!reader.nextLine().startsWith("y")) {
+                return;
+            }
+        }
+
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(outFile);
+            printWriter.println(customerCollectionData);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            if (printWriter != null) 
+                printWriter.close();
+        }
+
     }
     /*******************************************************************
     *       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         *
