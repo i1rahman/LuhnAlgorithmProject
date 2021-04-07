@@ -17,7 +17,7 @@ class CustomerSystem{
         exitCondition = "9";
 
         // More variables for the main may be declared in the space below
-
+        
 
         do{
             printMenu();                                    // Printing out the main menu
@@ -69,6 +69,7 @@ class CustomerSystem{
         System.out.println("Enter City: ");
         String city = reader.nextLine();
 
+        // Postal Code
         String postalCode;
         boolean validPostal = false;
         try {
@@ -84,9 +85,16 @@ class CustomerSystem{
             System.out.println(e.getMessage());
         }
         
+        // Credit Card 
+        boolean validCC = false;
+        while (!validCC) {
+            System.out.println("Enter Credit Card Number: ");
+            String creditCard = reader.nextLine();
+            validCC = validateCreditCard(creditCard);
+            if (!validCC)
+                System.out.println("That Credit Card is invalid.");
+        }
 
-        System.out.println("Enter Credit Card Number: ");
-        String creditCard = reader.nextLine();
     }
     /*
     * This method may be edited to achieve the task however you like.
@@ -131,13 +139,33 @@ class CustomerSystem{
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
-    public static void validateCreditCard() {
+    public static boolean validateCreditCard(String creditCardNumber) {
+        
+        if (creditCardNumber.length() < 9)
+            return false;
+    
+        int sum1 = 0;
+        int sum2 = 0;
+         
+        for (int i = creditCardNumber.length() - 1; i >= 0; i--) {
+    
+            char creditDigit = creditCardNumber.charAt(i);
+
+            if (!Character.isDigit(creditDigit))
+                return false;
+    
+            int creditDigitNumberical = Character.getNumericValue(creditDigit);
+    
+            if ((i + 1) % 2 == 0) { // even
+                int doubleDigits = 2*creditDigitNumberical;
+                int sumOfDigits = (doubleDigits/10) + (doubleDigits%10);
+                sum2 += sumOfDigits;
+            } else // odd
+                sum1 += creditDigitNumberical;
+        }
+        return (sum1 + sum2)%10 == 0;
     }
-    /*
-    * This method may be edited to achieve the task however you like.
-    * The method may not nesessarily be a void return type
-    * This method may also be broken down further depending on your algorithm
-    */
+
     public static void generateCustomerDataFile() {
     }
     /*******************************************************************
