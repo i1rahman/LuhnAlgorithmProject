@@ -21,7 +21,7 @@ class CustomerSystem {
         // More variables for the main may be declared in the space below
         String customerCollection = "";
         int customerCounter = 1;
-
+       
         do{
             printMenu();                                    // Printing out the main menu
             userInput = reader.nextLine();                  // User selection from the menu
@@ -138,16 +138,16 @@ class CustomerSystem {
 
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
-        // Enter postal code: i3 bug 
-        
-        if ((userPostalCode.length() < 3) || !Character.isAlphabetic(userPostalCode.charAt(0)) || !Character.isDigit(userPostalCode.charAt(1)) || !Character.isAlphabetic(userPostalCode.charAt(2)))
+        if (userPostalCode.length() < 3)
+            return false;
+
+        if (!Character.isAlphabetic(userPostalCode.charAt(0)) || !Character.isDigit(userPostalCode.charAt(1)) || !Character.isAlphabetic(userPostalCode.charAt(2))) 
             return false;
 
         if (allPostalCodeCache == null)
             allPostalCodeCache = loadPostalCodes();
         
         return (allPostalCodeCache.indexOf(userPostalCode) > -1);
-
     }
 
 
