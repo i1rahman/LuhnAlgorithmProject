@@ -18,6 +18,7 @@ class CustomerSystem{
 
         // More variables for the main may be declared in the space below
         String customerCollection = "";
+        int customerCounter = 1;
 
         do{
             printMenu();                                    // Printing out the main menu
@@ -26,7 +27,7 @@ class CustomerSystem{
             if (userInput.equals(enterCustomerOption)){
                 // Only the line below may be editted based on the parameter list and how you design the method return
 		        // Any necessary variables may be added to this if section, but nowhere else in the code
-                customerCollection += enterCustomerInfo();
+                customerCollection += customerCounter++ + ", " + enterCustomerInfo();
             }
             else if (userInput.equals(generateCustomerOption)) {
                 // Only the line below may be editted based on the parameter list and how you design the method return
@@ -57,7 +58,7 @@ class CustomerSystem{
     * This method may also be broken down further depending on your algorithm
     */
     public static String enterCustomerInfo() {
-        
+
         Scanner reader = new Scanner(System.in);
 
         System.out.println("Enter First Name: ");
