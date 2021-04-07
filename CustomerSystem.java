@@ -7,7 +7,9 @@ import java.util.Scanner;
 // More packages may be imported in the space below
 import java.io.*;
 
-class CustomerSystem{
+class CustomerSystem {
+
+    static String allPostalCodeCache = null;
     public static void main(String[] args){
         // Please do not edit any of these variables
         Scanner reader = new Scanner(System.in);
@@ -72,13 +74,13 @@ class CustomerSystem{
 
         // Postal Code
         String postalCode = "";
-        boolean validPostal = false;
+        boolean valid = false;
         try {
-            while (!validPostal) {
+            while (!valid) {
                 System.out.println("Enter Postal Code: ");
                 postalCode = reader.nextLine();
-                validPostal = validatePostalCode(postalCode.substring(0,3));
-                if (!validPostal)
+                valid = validatePostalCode(postalCode.substring(0,3));
+                if (!valid)
                     System.out.println("That postal code is invalid.");
             }
         }
@@ -88,12 +90,12 @@ class CustomerSystem{
         
         // Credit Card 
         String creditCard = "";
-        boolean validCC = false;
-        while (!validCC) {
+        valid = false;
+        while (!valid) {
             System.out.println("Enter Credit Card Number: ");
             creditCard = reader.nextLine();
-            validCC = validateCreditCard(creditCard);
-            if (!validCC)
+            valid = validateCreditCard(creditCard);
+            if (!valid)
                 System.out.println("That Credit Card is invalid.");
         }
 
@@ -104,39 +106,51 @@ class CustomerSystem{
     * The method may not nesessarily be a void return type
     * This method may also be broken down further depending on your algorithm
     */
+    // public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
+
+    //     //TODO: Postal Code validation
+    //     // Postal Code caching 
+
+    //     // Reading file and saving to String
+    //     FileReader file = new FileReader(".\\postal_codes.csv");
+    //     Scanner scnr = new Scanner(file);
+
+    //     String allPostalCodes = "";
+        
+    //     // https://stackoverflow.com/questions/42319341/how-do-i-start-scanning-from-the-second-row-of-my-csv-data-to-linked-list
+    //     int lineNumber = 1;
+    //     while(scnr.hasNextLine()) {
+
+    //         String line = scnr.nextLine();
+
+    //         if (lineNumber > 1)
+    //             allPostalCodes += line.substring(0,4);
+
+    //         lineNumber++;
+        
+    //     } 
+
+    //     // Getting user input and comparing against postal codes
+
+    //     return (allPostalCodes.indexOf(userPostalCode) > -1);
+
+    // }
+
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
-        // Reading file and saving to String
-        FileReader file = new FileReader(".\\postal_codes.csv");
-        Scanner scnr = new Scanner(file);
-
-        String allPostalCodes = "";
+        // Enter postal code: i3 bug 
         
-        // https://stackoverflow.com/questions/42319341/how-do-i-start-scanning-from-the-second-row-of-my-csv-data-to-linked-list
-        int lineNumber = 1;
-        while(scnr.hasNextLine()) {
+        if ((userPostalCode.length() < 3) || !Character.isAlphabetic(userPostalCode.charAt(0)) || !Character.isDigit(userPostalCode.charAt(1)) || !Character.isAlphabetic(userPostalCode.charAt(2)))
+            return false;
 
-            String line = scnr.nextLine();
-
-            if (lineNumber > 1) {
-
-                String postalCode = line.substring(0,4); 
-
-                allPostalCodes = allPostalCodes + postalCode;
-
-            }
-
-            lineNumber++;
+        if (allPostalCodeCache == null)
+            allPostalCodeCache = loadPostalCodes();
         
-        } 
-
-        // System.out.println(allPostalCodes);
-
-        // Getting user input and comparing against postal codes
-
-        return (allPostalCodes.indexOf(userPostalCode) > -1);
+        return (allPostalCodeCache.indexOf(userPostalCode) > -1);
 
     }
+
+
     /*
     * This method may be edited to achieve the task however you like.
     * The method may not nesessarily be a void return type
@@ -202,4 +216,22 @@ class CustomerSystem{
     /*******************************************************************
     *       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         *
     *******************************************************************/
+
+    public static String loadPostalCodes() throws FileNotFoundException {  
+
+        // Reading file and saving to String
+        FileReader file = new FileReader(".\\postal_codes.csv");
+        Scanner scnr = new Scanner(file);
+
+        String allPostalCodes = "";
+
+        if (scnr.hasNextLine()) // skip the header
+            scnr.nextLine(); 
+
+        while(scnr.hasNextLine())
+            allPostalCodes += scnr.nextLine().substring(0,4);
+
+        return allPostalCodes;
+    }
+
 }
