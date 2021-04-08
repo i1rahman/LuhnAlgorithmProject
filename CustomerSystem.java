@@ -185,19 +185,19 @@ class CustomerSystem {
      */
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
-        // If the length of the user's postal code is under 3, return false. 
-        if (userPostalCode.length() < 3)
+        // Check that userPostalCode is an object. Then check if the length of the user's postal code is under 3. If either, return false. 
+        if (userPostalCode == null || userPostalCode.length() < 3)
             return false;
 
-        // If the first 3 characters of the postal code isn't a letter, number, letter, then return false. 
+        // Check if the first 3 characters of the postal code is a letter, number, letter. Otherwise return false. 
         if (!Character.isAlphabetic(userPostalCode.charAt(0)) || !Character.isDigit(userPostalCode.charAt(1)) || !Character.isAlphabetic(userPostalCode.charAt(2))) 
             return false;
 
-        // If the string containing all the postal codes is blank, then the loadPostalCodes method loades all the postal codes into the allPostalCodeCache variable. 
+        // Check if the postal codes have been previously loaded into the global string variable. If it hasn't, then load once. 
         if (allPostalCodeCache == null)
             allPostalCodeCache = loadPostalCodes();
         
-        // Returns true if the postal codes exists and false if it does not. 
+        // Returns true if the postal codes exists (in the file) and false if it does not. 
         return (allPostalCodeCache.indexOf(userPostalCode) > -1);
     }
 
@@ -211,10 +211,17 @@ class CustomerSystem {
      */
     public static boolean validateCreditCard(String creditCardNumber) {
         
-        // If the length of the credit card number is under 9, return false. 
-        if (creditCardNumber.length() < 9)
+        // ensure the creditCardNumber string object has a value.
+        if (creditCardNumber == null)
             return false;
         
+        // replace the spaces in the credit card number before we check the length.
+        creditCardNumber = creditCardNumber.replaceAll("\\s", "");
+
+        // If the length of the credit card number is under 9, return false.
+        if (creditCardNumber.length() < 9)
+            return false;
+
         /**
          * Sum of the odd credit card digits.
          */
@@ -263,6 +270,12 @@ class CustomerSystem {
      * @return 
      */
     public static void generateCustomerDataFile(String customerCollectionData) {
+
+        // ensure the creditCardNumber string object has a value.
+        if (customerCollectionData == null || customerCollectionData.equals("")) {
+            System.out.print("There are 0 customer records in the system. Please add.");
+            return;
+        }
 
         // TODO: checking to see if customerCollectionData is null
 
