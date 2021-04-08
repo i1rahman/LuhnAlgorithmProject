@@ -1,34 +1,26 @@
 // Throughout this project, the use of data structures are not permitted such as methods like .split and .toCharArray
-/*
- * Date: April 8, 2021
- * Name: Ibrahim Rahman, 341169092@gapps.yrdsb.ca
- * Teacher: Mr. Ho
- * Description: This program allows users to enter customer information such as first name, last name, city, postal code,
- * and credit card number. Postal codes are validated against a .CSV file containing all area codes around Canada,
- * and credit card numbers are validated using the Luhn Algorithm. Once the postal code and credit card are validated,
- * all the customer information is saved. This can be exported in the form of a .CSV file. 
- * 
- */
-
-
 
 import java.util.Scanner;
 // More packages may be imported in the space below
-// TODO: Why I imported that package?
-import java.io.*;
+import java.io.*;  // Used for reading and writing files.
 
 /**
+ * Date: April 8, 2021
+ * Teacher: Mr. Ho
+ * <p>
+ * This program allows users to enter customer information such as first name, last name, city, postal code,
+ * and credit card number. Postal codes are validated against a .CSV file containing all area codes around Canada,
+ * and credit card numbers are validated using the Luhn Algorithm. Once the postal code and credit card are validated,
+ * all the customer information is saved. This can be exported in the form of a .CSV file.
+ * 
  * @author Ibrahim Rahman <341169092@gapps.yrdsb.ca>
  */
 
 class CustomerSystem {
 
-    // TODO: Comment variable
-    static String allPostalCodeCache = null;
-
     /**
      * Main method. Allows users to enter customer information and generate a .CSV file with that information. 
-     * @param args Command line arguments. 
+     * @param args Command line arguements will be ignored. 
      */
     public static void main(String[] args){
         // Please do not edit any of these variables
@@ -57,11 +49,19 @@ class CustomerSystem {
             if (userInput.equals(enterCustomerOption)){
                 // Only the line below may be editted based on the parameter list and how you design the method return
 		        // Any necessary variables may be added to this if section, but nowhere else in the code
-                // TODO: Comment
+
+                /**
+                *  Requirement 1.c: The system should automatically assign a unique customer number to each customer 
+                *  starting with an id value of 1
+                */
                 customerCollection += customerCounter++ + ", " + enterCustomerInfo();
             }
             else if (userInput.equals(generateCustomerOption)) {
                 // Only the line below may be editted based on the parameter list and how you design the method return
+
+                /**
+                *  Pass the customerCollection to be saved to a file.
+                */ 
                 generateCustomerDataFile(customerCollection);
                 
             }
@@ -97,15 +97,13 @@ class CustomerSystem {
          */
         Scanner reader = new Scanner(System.in);
 
-        // Asks the user to enter customer's first name.
         System.out.println("Enter First Name: ");
 
         /**
-         * Stores the customer's first name. 
+         * Asks the user to enter customer's first name. Stored the customer's first name. 
          */
         String firstName = reader.nextLine();
 
-        // Asks the user to enter customer's last name.
         System.out.println("Enter Last Name: ");
 
         /**
@@ -113,7 +111,6 @@ class CustomerSystem {
          */
         String lastName = reader.nextLine();
 
-        // Asks the user to enter customer's city. 
         System.out.println("Enter City: ");
 
         /**
@@ -121,7 +118,7 @@ class CustomerSystem {
          */
         String city = reader.nextLine();
 
-        // Postal Code validation
+        /** --------------- Postal Code validation --------------- */
 
         /**
          * Holds the inputted postal code. 
@@ -129,19 +126,18 @@ class CustomerSystem {
         String postalCode = "";
 
         /**
-         * Holds the boolean value of what a method returns. 
+         * Assume the postal code input is invalid, until it's validated. 
          */
         boolean valid = false;
 
         try {
 
-            // While valid is false, asks for user to input postal code. Then, it validates the first 3 characters of the 
-            // postal code with the validatePostalCode method. If the postal code is invalid, then it prints a message and 
-            // repeats the loop. 
+            // Ask the user to enter a postal code until a valid one is entered.
             while (!valid) {
                 System.out.println("Enter Postal Code: ");
                 postalCode = reader.nextLine();
-                valid = validatePostalCode(postalCode.substring(0,3));
+
+                valid = validatePostalCode(postalCode);
                 if (!valid)
                     System.out.println("That postal code is invalid.");
             }
@@ -152,18 +148,17 @@ class CustomerSystem {
             System.out.println(e.getMessage());
         }
         
-        // Credit Card validation 
+        /** --------------- Credit Card validation --------------- */
 
         /**
          * Holds the inputted credit card number.
          */
         String creditCard = "";
 
-        // sets valid to false.
+        // Assume the credit card input is invalid, until it's validated.
         valid = false;
 
-        // While valid is false, asks user to enter credit card number. Then, it validates the number using the 
-        // validateCreditCard method. If the credit card is invalid, then it prints a message and repeats the loop. 
+        // Ask the user to enter a credit card until a valid one is entered.
         while (!valid) {
             System.out.println("Enter Credit Card Number: ");
             creditCard = reader.nextLine();
@@ -172,37 +167,50 @@ class CustomerSystem {
                 System.out.println("That Credit Card is invalid.");
         }
 
-        // Close the scanner if it's not null.
-        if (reader != null)
-            reader.close();
-
-        // Returns a string of first name, last name, city, postal code, and credit card number. 
+        // Returns a string as a concatenation of the first name, last name, city, postal code, and credit card number. 
         return firstName + ", " + lastName + ", " + city + ", " + postalCode + ", " + creditCard + "\r\n";     
     }
     /**
      * Validates postal code. 
      *
      * @param userPostalCode String of the user's inputted postal code.  
-     * @return <code> false </code> if the psotal code is under a length of 3, the postal code isn't a letter, number, letter, or if the postal code 
+     * @return <code> false </code> if the psotal code is under a length of 3 
      *         doesn't exist; <code> true </code> if the postal code does exist. 
      * @throws FileNotFoundException Signals that an attempt to open a file denoted by a specified pathname has failed. 
      */
     public static boolean validatePostalCode(String userPostalCode) throws FileNotFoundException {  
 
         // Check that userPostalCode is an object. Then check if the length of the user's postal code is under 3. If either, return false. 
+        // Requirement: 1.a.i.1: Must be at least 3 characters in length
         if (userPostalCode == null || userPostalCode.length() < 3)
             return false;
 
-        // Check if the first 3 characters of the postal code is a letter, number, letter. Otherwise return false. 
-        if (!Character.isAlphabetic(userPostalCode.charAt(0)) || !Character.isDigit(userPostalCode.charAt(1)) || !Character.isAlphabetic(userPostalCode.charAt(2))) 
-            return false;
+        // Requirement 1.a.i.2: The first 3 characters must match the postal codes loaded from the file
+        userPostalCode = userPostalCode.substring(0,3);
 
-        // Check if the postal codes have been previously loaded into the global string variable. If it hasn't, then load once. 
-        if (allPostalCodeCache == null)
-            allPostalCodeCache = loadPostalCodes();
-        
-        // Returns true if the postal codes exists (in the file) and false if it does not. 
-        return (allPostalCodeCache.indexOf(userPostalCode) > -1);
+        /**
+         * Constructs a new Scanner that produces values scanned from the specified input stream.
+         */
+        Scanner scnr = new Scanner(new FileReader(".\\postal_codes.csv"));
+        scnr.useDelimiter("\\|");
+ 
+        // check if the file has at least one line. Assume it's the header. Read it, and throw it away.
+        if (scnr.hasNextLine())
+            scnr.nextLine();
+
+        // While there's another line, this will continue to append the first for digits of a line
+        // to the allPostalCodes string. 
+        while(scnr.hasNextLine()) {
+            String postalzip = scnr.next();
+
+            // ignore case when comparing postal codes to the file.
+            if (postalzip.equalsIgnoreCase(userPostalCode)) {
+                return true;
+            }                
+            scnr.nextLine();
+        }
+
+        return false;
     }
 
 
@@ -223,9 +231,11 @@ class CustomerSystem {
         creditCardNumber = creditCardNumber.replaceAll("\\s", "");
 
         // If the length of the credit card number is under 9, return false.
+        // Requirement 1.b.i.1: Must be at least 9 digits in length
         if (creditCardNumber.length() < 9)
             return false;
 
+        // Requirement 1.b.i.2: The digits must pass the Luhn algorithm.
         /**
          * Sum of the odd credit card digits.
          */
@@ -247,22 +257,29 @@ class CustomerSystem {
                 return false;
     
             /**
-             * Assigns the int value that the creditDigit Unicode character represents to creditDigitNumerical.
+             * Convert the character to an integer
              */
             int creditDigitNumerical = Character.getNumericValue(creditDigit);
     
-            // If the position of the number is even, then sum the digits and add to sum2. 
-            if ((i + 1) % 2 == 0) { // even
+            // If the position of the number is even
+            if ((i + 1) % 2 == 0) {
+
+                // double the even digits
                 int doubleDigits = 2*creditDigitNumerical;
+
+                // Sum the digits > 9. Get the first digit using div. Get the last digit using mod.
+                // For numbers <= 9, the div portion will return 0 anyway, so it still works.
                 int sumOfDigits = (doubleDigits/10) + (doubleDigits%10);
+
+                // sum up all the digits.
                 sum2 += sumOfDigits;
 
-            // else, add the numbers to sum1. 
-            } else // odd
+            // Position is Odd: Add up the odd indexed numbers.
+            } else
                 sum1 += creditDigitNumerical;
         }
 
-        // returns true or false, depending on if the number ends with 0.
+        // Get the last digit using mod. If ends with 0, return true. Otherwise false.
         return (sum1 + sum2)%10 == 0;
     }
 
@@ -295,86 +312,31 @@ class CustomerSystem {
         String outputFilename = reader.nextLine();
 
         /**
-         * Creates a new file instance.
+         * Creates a new output file reference.
          */
         File outFile = new File(outputFilename);
 
-        // If the file already exists, then it will ask the user if they want to overwrite the file. 
+        // If the file already exists, then it will ask the user if they want to overwrite the file. Otherwise, write the file.
         if (outFile.exists()) {
             System.out.print("File already exists, ok to overwrite (y/n)? ");
-            if (!reader.nextLine().startsWith("y")) {
-                reader.close();
+            if (!reader.nextLine().startsWith("y"))
                 return;
-            }
         }
 
-        if (reader != null)
-            reader.close();
 
-        /**
-         * Initiates a PrintWriter type and assignes it a value of null. 
-         */
-        PrintWriter printWriter = null;
-
-        // Creates a new PrintWriter with the specified file. Then, prints the customer collection data to
-        // the file. 
-        try {
-            printWriter = new PrintWriter(outFile);
+        // Creates a new PrintWriter with the specified file. The customer collection is already a csv in memory. 
+        // Simply write the in memory customerCollection variable to the file.
+        // Use a resource block so we don't have to close the PrintWriter. 
+        try (PrintWriter printWriter = new PrintWriter(outFile)) {
             printWriter.println(customerCollectionData);
         }
-        // Catches all exceptions. 
-        catch (FileNotFoundException e) {
-            // Prints the exception.
-            System.out.println(e.getMessage());
+        // Catches IOException exceptions. 
+        catch (IOException e) {       
+            System.out.println(e.getMessage()); // Prints the exception.
         }
-
-        // Closes printWriter. 
-        finally {
-            if (printWriter != null) 
-                printWriter.close();
-        }
-
     }
     /*******************************************************************
     *       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         *
     *******************************************************************/
-
-    /**
-     * Loads postal codes from the .CSV file. Adds the postal codes in the form of a string to
-     * the allPostalCodes variable. 
-     * 
-     * @return <code> allPostalCodes </code> when the first four characters from every line is 
-     *         added to the string. 
-     * @throws FileNotFoundException
-     */
-    public static String loadPostalCodes() throws FileNotFoundException {  
-
-        /**
-         * Constructs a new Scanner that produces values scanned from the specified input stream.
-         */
-        Scanner scnr = new Scanner(new FileReader(".\\postal_codes.csv"));
-
-        /**
-         * Holds a string of all the postal codes concatenated and seperated by a '|' delimiter.
-         */
-        String allPostalCodes = "";
- 
-        // check if the file has at least one line. Assume it's the header. Read it, and throw it away.
-        if (scnr.hasNextLine())
-            scnr.nextLine();
-
-        // While there's another line, this will continue to append the first for digits of a line
-        // to the allPostalCodes string. 
-        while(scnr.hasNextLine())
-            allPostalCodes += scnr.nextLine().substring(0,4);
-        
-        if (scnr != null)
-            scnr.close();
-        
-            // Will return the string of allPostalCodes. 
-        return allPostalCodes;
-
-
-    }
 
 }
