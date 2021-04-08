@@ -191,6 +191,7 @@ class CustomerSystem {
 
         /**
          * Constructs a new Scanner that produces values scanned from the specified input stream.
+         * If static variables were allowed, we'd make the filename outside the main.
          */
         Scanner scnr = new Scanner(new FileReader(".\\postal_codes.csv"));
         scnr.useDelimiter("\\|");
