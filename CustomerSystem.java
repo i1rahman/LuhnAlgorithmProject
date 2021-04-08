@@ -54,7 +54,7 @@ class CustomerSystem {
                 *  Requirement 1.c: The system should automatically assign a unique customer number to each customer 
                 *  starting with an id value of 1
                 */
-                customerCollection += customerCounter++ + ", " + enterCustomerInfo();
+                customerCollection += enterCustomerInfo(customerCounter++);
             }
             else if (userInput.equals(generateCustomerOption)) {
                 // Only the line below may be editted based on the parameter list and how you design the method return
@@ -88,9 +88,10 @@ class CustomerSystem {
     /**
      * Allows users to enter customer information.
      * 
-     * @return String containing customer's first name, last name, city, postal code, and credit card number. 
+     * @param customerId Integer of the customer's unique id.   
+     * @return String containing customer's id, first name, last name, city, postal code, and credit card number. 
      */
-    public static String enterCustomerInfo() {
+    public static String enterCustomerInfo(int customerId) {
 
         /**
          * Constructs a new Scanner that produces values scanned from the specified input stream.
@@ -167,8 +168,8 @@ class CustomerSystem {
                 System.out.println("That Credit Card is invalid.");
         }
 
-        // Returns a string as a concatenation of the first name, last name, city, postal code, and credit card number. 
-        return firstName + ", " + lastName + ", " + city + ", " + postalCode + ", " + creditCard + "\r\n";     
+        // Returns a string as a concatenation of the customer id, first name, last name, city, postal code, and credit card number. 
+        return customerId + ", " + firstName + ", " + lastName + ", " + city + ", " + postalCode + ", " + creditCard + "\r\n";     
     }
     /**
      * Validates postal code. 
