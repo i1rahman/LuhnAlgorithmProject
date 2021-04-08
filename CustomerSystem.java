@@ -172,6 +172,10 @@ class CustomerSystem {
                 System.out.println("That Credit Card is invalid.");
         }
 
+        // Close the scanner if it's not null.
+        if (reader != null)
+            reader.close();
+
         // Returns a string of first name, last name, city, postal code, and credit card number. 
         return firstName + ", " + lastName + ", " + city + ", " + postalCode + ", " + creditCard + "\r\n";     
     }
@@ -277,8 +281,6 @@ class CustomerSystem {
             return;
         }
 
-        // TODO: checking to see if customerCollectionData is null
-
         /**
          * Constructs a new Scanner that produces values scanned from the specified input stream.
          */
@@ -301,10 +303,13 @@ class CustomerSystem {
         if (outFile.exists()) {
             System.out.print("File already exists, ok to overwrite (y/n)? ");
             if (!reader.nextLine().startsWith("y")) {
+                reader.close();
                 return;
             }
         }
 
+        if (reader != null)
+            reader.close();
 
         /**
          * Initiates a PrintWriter type and assignes it a value of null. 
@@ -345,31 +350,31 @@ class CustomerSystem {
     public static String loadPostalCodes() throws FileNotFoundException {  
 
         /**
-         * Creates a new FileReader to read the postal_codes.csv file. 
-         */
-        FileReader file = new FileReader(".\\postal_codes.csv");
-
-        /**
          * Constructs a new Scanner that produces values scanned from the specified input stream.
          */
-        Scanner scnr = new Scanner(file);
+        Scanner scnr = new Scanner(new FileReader(".\\postal_codes.csv"));
 
         /**
-         * Holds a string of all the postal codes concatenated to each other. 
+         * Holds a string of all the postal codes concatenated and seperated by a '|' delimiter.
          */
         String allPostalCodes = "";
-
-        // This line skips the header. 
+ 
+        // check if the file has at least one line. Assume it's the header. Read it, and throw it away.
         if (scnr.hasNextLine())
-            scnr.nextLine(); 
+            scnr.nextLine();
 
         // While there's another line, this will continue to append the first for digits of a line
         // to the allPostalCodes string. 
         while(scnr.hasNextLine())
             allPostalCodes += scnr.nextLine().substring(0,4);
-
-        // Will return the string of allPostalCodes. 
+        
+        if (scnr != null)
+            scnr.close();
+        
+            // Will return the string of allPostalCodes. 
         return allPostalCodes;
+
+
     }
 
 }
