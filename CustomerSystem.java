@@ -191,7 +191,7 @@ class CustomerSystem {
 
         /**
          * Constructs a new Scanner that produces values scanned from the specified input stream.
-         * If static variables were allowed, we'd make the filename outside the main.
+         * If static variables were allowed, I'd make the filename outside the main.
          */
         Scanner scnr = new Scanner(new FileReader(".\\postal_codes.csv"));
         scnr.useDelimiter("\\|");
@@ -239,12 +239,12 @@ class CustomerSystem {
 
         // Requirement 1.b.i.2: The digits must pass the Luhn algorithm.
         /**
-         * Sum of the odd credit card digits.
+         * Sum of the odd indexed credit card digits.
          */
         int sum1 = 0;
 
         /**
-         * Sum of the even credit card digits. 
+         * Sum of the even indexed credit card digits. 
          */
         int sum2 = 0;
         
@@ -294,7 +294,7 @@ class CustomerSystem {
      */
     public static void generateCustomerDataFile(String customerCollectionData) {
 
-        // ensure the creditCardNumber string object has a value.
+        // ensure the customerCollectionData string object has a value.
         if (customerCollectionData == null || customerCollectionData.equals("")) {
             System.out.print("There are 0 customer records in the system. Please add.");
             return;
